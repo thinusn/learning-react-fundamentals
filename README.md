@@ -179,7 +179,7 @@ class App extends React.Component {
              * To solve this problem you can give the child input its own ref tag and then via dot notation you gain
              * access to the values. e.g
              * <code>
-             *     // Here the `div` will be `this.refs.red` to get to the input you need to use this.refs.red.myInput
+             *     // Here the `div` will be `this.refs.red` to get to the input you need to use (this.refs.red.refs.myInput).value
              *     class Slider extends React.Component {
              *          render() {
              *               return (<div><input ref="myInput" type="range" min="0" max="255" onChange={this.props.update}/></div>)
@@ -417,4 +417,80 @@ class App extends React.Component {
         </div>)
     }
 }
+```
+
+
+## Composable Components
+
+This allows you to make a function more genertic and re usable. By passing in params to a component you can reeuse and change based on setting a few things. 
+```js
+class App extends React.Component {
+    //To initialise values
+    constructor() {
+        super();//Sets the `this` context for the component
+        this.state = {
+            red: 0
+        };
+        this.update = this.update.bind(this);
+    }
+    update(event) {
+        //passing the value of the state you are concerned about.
+        this.setState({
+            red: ReactDOM.findDOMNode(this.refs.red.refs.inp).value,
+        });
+    }
+
+    render() {
+        //The ref tags allows you to indicate what state it needs to be updated
+        return (<div>
+                <NumInput ref='red'
+                          min={0}
+                          max={255}
+                          step={1}
+                          type="number"
+                          label="Red"
+                          val={+this.state.red}
+                          update={this.update}/>
+            </div>
+        )
+    }
+}
+
+class NumInput extends React.Component {
+    render() {
+        let label =  this.props.label !== '' ?
+            <label>{this.props.label} - {this.props.val}</label> : '';
+
+        return (<div>
+            <input ref="inp"
+                    type={this.props.type}
+                   min={this.props.min}
+                   max={this.props.max}
+                   step={this.props.step}
+                   defaultValue ={this.props.val}
+                   onChange={this.props.update}/>
+            <br/>
+            {label}
+        </div>)
+    };
+}
+
+NumInput.propTypes = {
+    min: React.PropTypes.number,
+    max: React.PropTypes.number,
+    step:React.PropTypes.number,
+    val:React.PropTypes.number,
+    label: React.PropTypes.string,
+    update: React.PropTypes.func.required,
+    type: React.PropTypes.oneOf(['number', 'range'])
+};
+
+NumInput.defaultProps = {
+    min: 0,
+    max: 0,
+    step:1,
+    val:0,
+    label: '',
+    type: 'range'
+};
 ```

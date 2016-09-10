@@ -1,49 +1,74 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-
-let Mixin = InnerComponent => class extends React.Component {
+class App extends React.Component {
+    //To initialise values
     constructor() {
-        super();
+        super();//Sets the `this` context for the component
         this.state = {
-            val: 0
+            red: 0
         };
-        this.update = this.update.bind(this)
+        this.update = this.update.bind(this);
     }
-
-    update() {
+    update(event) {
+        //passing the value of the state you are concerned about.
         this.setState({
-            val: this.state.val + 1
+            red: ReactDOM.findDOMNode(this.refs.red.refs.inp).value,
         });
     }
 
     render() {
-        return <InnerComponent
-            update={this.update}
-            {...this.state}
-            {...this.props}
-        />
-    }
-};
-
-
-const Button = (props) => <button onClick={props.update}>{props.txt} - {props.val}</button>;
-const Label = (props) => <label onMouseMove={props.update}>{props.txt} - {props.val}</label>;
-
-
-let ButtonMixed = Mixin(Button);
-let LabelMixed = Mixin(Label);
-
-class App extends React.Component {
-
-    render() {
+        //The ref tags allows you to indicate what state it needs to be updated
         return (<div>
-            <ButtonMixed txt="My btn 1"></ButtonMixed>
-            <LabelMixed txt="My label"></LabelMixed>
-            <ButtonMixed txt="My btn 3"></ButtonMixed>
-        </div>)
+                <NumInput ref='red'
+                          min={0}
+                          max={255}
+                          step={1}
+                          type="number"
+                          label="Red"
+                          val={+this.state.red}
+                          update={this.update}/>
+            </div>
+        )
     }
 }
+
+class NumInput extends React.Component {
+    render() {
+        let label =  this.props.label !== '' ?
+            <label>{this.props.label} - {this.props.val}</label> : '';
+
+        return (<div>
+            <input ref="inp"
+                    type={this.props.type}
+                   min={this.props.min}
+                   max={this.props.max}
+                   step={this.props.step}
+                   defaultValue ={this.props.val}
+                   onChange={this.props.update}/>
+            <br/>
+            {label}
+        </div>)
+    };
+}
+
+NumInput.propTypes = {
+    min: React.PropTypes.number,
+    max: React.PropTypes.number,
+    step:React.PropTypes.number,
+    val:React.PropTypes.number,
+    label: React.PropTypes.string,
+    update: React.PropTypes.func.required,
+    type: React.PropTypes.oneOf(['number', 'range'])
+};
+
+NumInput.defaultProps = {
+    min: 0,
+    max: 0,
+    step:1,
+    val:0,
+    label: '',
+    type: 'range'
+};
 
 
 export default App
