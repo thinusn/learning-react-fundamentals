@@ -18,6 +18,17 @@ class App extends React.Component{
      * @returns {XML}
      */
     render(){
+        /**
+         * Can only return single node, this is because behind teh scenes JSX converts ` <h1>Hello world</h1>`
+         * to `React.createElement('h1', null, 'Hello world')` and you cant have 2 functions after one another.
+         * To return multiple nodes you need to wrap then in a container/parent node e.g.
+         * <code> 
+         *     return ( <div>
+         *                  <h1>Hello world</h1><h2>I am below the h1</h2>
+         *              </div>
+         *             )
+         * </code>
+         */
         return <h1>Hello world</h1>
     }
 }
