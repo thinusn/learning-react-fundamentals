@@ -37,7 +37,7 @@ class App extends React.Component{
 const App = () => <h1>Hello world</h1>
 ```
 ## Properties 
-Used to pass values to your components. This is like passing/setting a value in normal js/html
+Used to pass values to your components as static values or methods. This is like passing/setting a value in normal js/html
 ### Declaring them
 ```js
  // Property types App is expecting
@@ -74,4 +74,30 @@ class App extends React.Component {
  }
 }
 ```
- 
+## States
+Collection of values that is managed by the component itself
+### Setting and retrieving states
+```js
+//To initialise values
+constructor() {
+    super();//Sets the `this` context for the component
+    this.state = {txt: 'this is the state txt'}
+}
+
+//The updates method is used to manage/change the state
+update(event) {
+    //passing the value of the state you are concerned about.
+    this.setState({txt: event.target.value});
+}
+
+render() {
+    //Accessing states are similar to accessing props
+    return (<div>
+            <input type="text"
+                   onChange={this.update.bind(this)}
+            />
+            <h1>{this.state.txt}</h1>
+        </div>
+    )
+}
+```

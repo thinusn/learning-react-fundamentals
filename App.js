@@ -1,45 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 /**
- * Rendering directly from the App.js
- **/
+ * STATES
+ * Collection of values that is managed by the component itself
+ */
 class App extends React.Component {
-    /** Can access's props by enclosing with {} braces and use the name defined in the `ReactDOM.render(` prop
-     *  e.g. `<App theName="this is the text for this prop"/>,` is aceessed by  `{this.props.theName}`
-     * @returns {XML}
-     */
+    //To initialise values
+    constructor() {
+        super();//Sets the `this` context for the component
+        this.state = {txt: 'this is the state txt'}
+    }
+
+    //The updates method is used to manage/change the state
+    update(event) {
+        //passing the value of the state you are concerned about.
+        this.setState({txt: event.target.value});
+    }
+
     render() {
-        let text = this.props.theName;
-        return <h1> {text} - {this.props.myVar}</h1>
+        //Accessing states are similar to accessing props
+        return (<div>
+                <input type="text"
+                       onChange={this.update.bind(this)}
+                />
+                <h1>{this.state.txt}</h1>
+            </div>
+        )
     }
 }
-
-/**
- * Properties
- *
- * Used to pass values to your components. This is like passing/setting a value in normal js/html
- */
-//Property types App is expecting
-App.propTypes = {
-    //Here way say `theName` is a {string}
-    theName: React.PropTypes.string,
-    myVar: React.PropTypes.number.isRequired
-};
-
-App.defaultProps = {
-    //Here way say `theName` should default to the following 
-    theName: "I am a default string"
-};
-// Adding a property to App
-ReactDOM.render(
-    <App
-        myVar={5}
-        theName="this is the text for this prop"
-    
-    />,
-    document.getElementById('app')
-);
 
 
 export default App
