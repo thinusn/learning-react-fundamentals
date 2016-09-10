@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class App extends React.Component {
 
+let Mixin = InnerComponent => class extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -17,56 +17,33 @@ class App extends React.Component {
         });
     }
 
-    // Component is fully prepped and guaranteed to make it to the dom
-    componentWillMount() {
-        //This is called when you add the component to the dom.
-        console.log('mounting');
+    render() {
+        return <InnerComponent
+            update={this.update}
+            {...this.state}
+            {...this.props}
+        />
     }
+};
+
+
+const Button = (props) => <button onClick={props.update}>{props.txt} - {props.val}</button>;
+const Label = (props) => <label onMouseMove={props.update}>{props.txt} - {props.val}</label>;
+
+
+let ButtonMixed = Mixin(Button);
+let LabelMixed = Mixin(Label);
+
+class App extends React.Component {
 
     render() {
-        //This is called for each update/change to the component. In this case every time
-        console.log('rendering');
         return (<div>
-            <button onClick={this.update}> {this.state.val}</button>
+            <ButtonMixed txt="My btn 1"></ButtonMixed>
+            <LabelMixed txt="My label"></LabelMixed>
+            <ButtonMixed txt="My btn 3"></ButtonMixed>
         </div>)
     }
-
-    // After component has been added to dom
-    componentDidMount() {
-        console.log('mounted');
-    }
-
-    // Called before removal of component
-    componentWillUnmount() {
-        console.log('unmounted');
-    }
 }
 
 
-class Wrapper extends React.Component {
-    constructor() {
-        super();//sets this context
-    }
-
-    //Renders app to the Dom
-    mount() {
-        ReactDOM.render(<App />, document.getElementById('a'))
-    }
-
-    //Removes from the dom
-    unmount() {
-        ReactDOM.unmountComponentAtNode(document.getElementById('a'))
-    }
-
-    render() {
-        return (
-            <div>
-                <button onClick={this.mount.bind(this)}>Mount</button>
-                <button onClick={this.unmount.bind(this)}>Unmount</button>
-                <div id="a"></div>
-            </div>
-        )
-    }
-}
-
-export default Wrapper
+export default App
