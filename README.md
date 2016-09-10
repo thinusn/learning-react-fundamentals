@@ -225,3 +225,50 @@ class Slider extends React.Component {
     };
 }
 ```
+
+## Accessing child properties
+When you want to access the inner html or nested components of another components you can use
+### inner html
+To display a inner html => `React Button`
+The Button component takes `React Button` from parent and displays it within the `Button`
+```js
+ class App extends React.Component {
+     render() {
+         return (<div>
+                    <Button>React Button</Button>
+                 </div>)
+     }
+ }
+ 
+ class Button extends React.Component {
+     //This allows you to access `React Button` inside App
+     render() {
+         return <button>{this.props.children}</button>
+     }
+ }
+```
+### nested components
+To display a nested component => `React ❤ Button`
+The Button component takes `React <Icon/> Button` from parent and displays it within the `Button` 
+```js
+class App extends React.Component {
+    render() {
+        return (<div>
+                <Button>React <Icon/> Button</Button>
+            </div>
+        )
+    }
+}
+
+class Button extends React.Component {
+    //This allows you to access `heart` inside App
+    render() {
+        return <button>{this.props.children}</button>
+    }
+}
+
+const Icon = () => {
+    "use strict";
+    return <span>❤</span>
+}
+```
