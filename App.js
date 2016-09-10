@@ -1,74 +1,79 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 class App extends React.Component {
-    //To initialise values
     constructor() {
-        super();//Sets the `this` context for the component
+        super();
         this.state = {
-            red: 0
+            data: [
+
+                {
+                    "id": "57d3e2655f968976b4dedaae",
+                    "age": 24,
+                    "eyeColor": "blue",
+                    "name": "West Henson",
+                    "gender": "male"
+                },
+                {
+                    "id": "57d3e265865e479142ab0b14",
+                    "age": 25,
+                    "eyeColor": "green",
+                    "name": "Agnes Douglas",
+                    "gender": "female"
+                },
+                {
+                    "id": "57d3e265f5a600834424f74c",
+                    "age": 27,
+                    "eyeColor": "green",
+                    "name": "Anna Mcfadden",
+                    "gender": "female"
+                },
+                {
+                    "id": "57d3e265c43efc13e6117aae",
+                    "age": 28,
+                    "eyeColor": "green",
+                    "name": "Kayla Bender",
+                    "gender": "female"
+                },
+                {
+                    "id": "57d3e265f13687d20ad56b1e",
+                    "age": 33,
+                    "eyeColor": "brown",
+                    "name": "Alexandria Finley",
+                    "gender": "female"
+                },
+            ]
         };
-        this.update = this.update.bind(this);
     }
-    update(event) {
-        //passing the value of the state you are concerned about.
-        this.setState({
-            red: ReactDOM.findDOMNode(this.refs.red.refs.inp).value,
+
+    render() {
+        let rows = this.state.data.map(person => {
+            return <PersonRow key={person.id} data={person}/>
         });
-    }
+        return <table>
+            <thead>
+            <tr>
+                <td>ID</td>
+                <td>Age</td>
+                <td>Eye Color</td>
+                <td>Name</td>
+                <td>Gender</td>
+            </tr>
+            </thead>
 
-    render() {
-        //The ref tags allows you to indicate what state it needs to be updated
-        return (<div>
-                <NumInput ref='red'
-                          min={0}
-                          max={255}
-                          step={1}
-                          type="number"
-                          label="Red"
-                          val={+this.state.red}
-                          update={this.update}/>
-            </div>
-        )
+            <tbody>{rows}</tbody>
+        </table>
     }
 }
 
-class NumInput extends React.Component {
-    render() {
-        let label =  this.props.label !== '' ?
-            <label>{this.props.label} - {this.props.val}</label> : '';
 
-        return (<div>
-            <input ref="inp"
-                    type={this.props.type}
-                   min={this.props.min}
-                   max={this.props.max}
-                   step={this.props.step}
-                   defaultValue ={this.props.val}
-                   onChange={this.props.update}/>
-            <br/>
-            {label}
-        </div>)
-    };
-}
-
-NumInput.propTypes = {
-    min: React.PropTypes.number,
-    max: React.PropTypes.number,
-    step:React.PropTypes.number,
-    val:React.PropTypes.number,
-    label: React.PropTypes.string,
-    update: React.PropTypes.func.required,
-    type: React.PropTypes.oneOf(['number', 'range'])
+const PersonRow = (props) => {
+    "use strict";
+    return <tr>
+        <td>{props.data.id}</td>
+        <td>{props.data.age}</td>
+        <td>{props.data.eyeColor}</td>
+        <td>{props.data.name}</td>
+        <td>{props.data.gender}</td>
+    </tr>
 };
-
-NumInput.defaultProps = {
-    min: 0,
-    max: 0,
-    step:1,
-    val:0,
-    label: '',
-    type: 'range'
-};
-
 
 export default App
